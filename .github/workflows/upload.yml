@@ -8,5 +8,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Repository Test
-        run: echo "Automation is working!"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Test Pexels API Key
+        env:
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: python download.py
