@@ -23,3 +23,8 @@ jobs:
         env:
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python download.py
+      - name: Upload Downloaded Video
+        uses: actions/upload-artifact@v4
+        with:
+          name: downloaded-video
+          path: output/video.mp4
