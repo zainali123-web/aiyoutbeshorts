@@ -11,14 +11,19 @@ url = "https://api.pexels.com/videos/search?query=funny animals&per_page=1"
 
 response = requests.get(url, headers=headers)
 
-print("Status:", response.status_code)
+if response.status_code != 200:
+    raise Exception(response.text)
 
-if response.status_code == 200:
-    data = response.json()
-    if data["videos"]:
-        print("✅ Pexels API Working!")
-        print("Video URL:", data["videos"][0]["video_files"][0]["link"])
-    else:
-        print("No videos found.")
-else:
-    print(response.text)
+video = response.json()["videos"][0]
+video_url = video["video_files"][0]["link"]
+
+print("Downloading:", video_url)
+
+video_data = requests.get(video_url)
+
+os.makedirs("output", exist_ok=True)
+
+with open("output/video.mp4", "wb") as f:
+    f.write(video_data.content)
+
+print("✅ Video downloaded successfully!")
